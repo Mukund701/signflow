@@ -1,0 +1,35 @@
+# ==============================
+# 1. ENVIRONMENT VARIABLES (CRITICAL)
+# ==============================
+.env
+backend/.env
+**/.env
+*.env
+
+# ==============================
+# 2. NODE DEPENDENCIES
+# ==============================
+**/node_modules/
+npm-debug.log
+yarn-error.log
+
+# ==============================
+# 3. NEXT.JS FRONTEND BUILD FILES
+# ==============================
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# ==============================
+# 4. EXPRESS BACKEND BUILD & UPLOADS
+# ==============================
+backend/dist/
+backend/build/
+backend/uploads/
+# (We ignore uploads so user PDFs don't get pushed to public GitHub!)
+
+# ==============================
+# 5. OS SYSTEM FILES
+# ==============================
+.DS_Store
+Thumbs.db
