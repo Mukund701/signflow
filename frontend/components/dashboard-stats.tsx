@@ -15,7 +15,7 @@ export function DashboardStats({ refreshKey }: DashboardStatsProps) {
     const fetchStats = async () => {
       try {
         const token = localStorage.getItem("token")
-        const res = await fetch("http://localhost:5000/api/docs/", { headers: { Authorization: `Bearer ${token}` } })
+        const res = await fetch("https://signflow-backend-0f8n.onrender.com/api/docs/", { headers: { Authorization: `Bearer ${token}` } })
         const data = await res.json()
         if (data.documents) {
           const total = data.documents.length

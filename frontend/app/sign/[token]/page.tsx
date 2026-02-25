@@ -24,7 +24,7 @@ export default function PublicSigningPage() {
   useEffect(() => {
     const fetchPublicDocument = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/docs/public/${token}`)
+        const res = await fetch(`https://signflow-backend-0f8n.onrender.com/api/docs/public/${token}`)
         const data = await res.json()
 
         if (!res.ok) throw new Error(data.error || "Failed to load document")

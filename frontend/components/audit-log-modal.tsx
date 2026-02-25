@@ -31,7 +31,7 @@ export function AuditLogModal({ isOpen, documentId, onClose }: AuditLogModalProp
       setError(null)
       try {
         const token = localStorage.getItem("token")
-        const res = await fetch(`http://localhost:5000/api/docs/${documentId}/logs`, {
+        const res = await fetch(`https://signflow-backend-0f8n.onrender.com/api/docs/${documentId}/logs`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         

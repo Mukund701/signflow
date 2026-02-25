@@ -24,7 +24,7 @@ export function UploadZone({ onUploadSuccess }: UploadZoneProps) {
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch("http://localhost:5000/api/docs/upload", {
+      const response = await fetch("https://signflow-backend-0f8n.onrender.com/api/docs/upload", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`

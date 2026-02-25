@@ -42,7 +42,7 @@ export default function UpdatePasswordPage() {
     setErrorMsg("")
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/update-password", {
+      const response = await fetch("https://signflow-backend-0f8n.onrender.com/api/auth/update-password", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

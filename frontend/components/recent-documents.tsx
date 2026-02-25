@@ -38,7 +38,7 @@ export function RecentDocuments({ refreshKey, onSignDocument }: { refreshKey: nu
     const fetchDocs = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5000/api/docs/", { headers: { Authorization: `Bearer ${token}` } });
+        const res = await fetch("https://signflow-backend-0f8n.onrender.com/api/docs/", { headers: { Authorization: `Bearer ${token}` } });
         const data = await res.json();
         if (data.documents) setDocuments(data.documents);
       } catch (error) {
@@ -55,7 +55,7 @@ export function RecentDocuments({ refreshKey, onSignDocument }: { refreshKey: nu
     if (newWindow) newWindow.document.write('<p style="font-family:sans-serif;">Loading Secure Document...</p>');
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/docs/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`https://signflow-backend-0f8n.onrender.com/api/docs/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       if (res.status === 404) {
         setDocuments(prevDocs => prevDocs.filter(doc => doc.id !== id));
         if (newWindow) newWindow.close();
@@ -76,7 +76,7 @@ export function RecentDocuments({ refreshKey, onSignDocument }: { refreshKey: nu
     e.stopPropagation(); 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/docs/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`https://signflow-backend-0f8n.onrender.com/api/docs/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       if (res.status === 404) {
         setDocuments(prevDocs => prevDocs.filter(doc => doc.id !== id));
         alert("This document was missing from the server and has been auto-removed.");
@@ -104,7 +104,7 @@ export function RecentDocuments({ refreshKey, onSignDocument }: { refreshKey: nu
     setDocuments(documents.filter(doc => doc.id !== idToDelete));
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/docs/${idToDelete}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`https://signflow-backend-0f8n.onrender.com/api/docs/${idToDelete}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
       if (res.status === 404) return; 
       if (!res.ok) throw new Error("Delete failed");
     } catch (error) {

@@ -41,7 +41,7 @@ export function AuthForm() {
     setErrorMsg("")
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/reset-password", {
+      const response = await fetch("https://signflow-backend-0f8n.onrender.com/api/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -74,7 +74,7 @@ export function AuthForm() {
       const endpoint = activeTab === "sign-in" ? "/api/auth/login" : "/api/auth/register"
       const payload = activeTab === "sign-in" ? { email, password } : { name, email, password }
 
-      const response = await fetch(`http://localhost:5000${endpoint}`, {
+      const response = await fetch(`https://signflow-backend-0f8n.onrender.com${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

@@ -33,7 +33,7 @@ export function RequestSignatureModal({ isOpen, onClose }: RequestSignatureModal
       setIsLoadingDocs(true)
       try {
         const token = localStorage.getItem("token")
-        const res = await fetch("http://localhost:5000/api/docs/", {
+        const res = await fetch("https://signflow-backend-0f8n.onrender.com/api/docs/", {
           headers: { Authorization: `Bearer ${token}` }
         })
         const data = await res.json()
@@ -59,7 +59,7 @@ export function RequestSignatureModal({ isOpen, onClose }: RequestSignatureModal
     
     try {
       const token = localStorage.getItem("token")
-      const res = await fetch(`http://localhost:5000/api/docs/${selectedDocId}/request`, {
+      const res = await fetch(`https://signflow-backend-0f8n.onrender.com/api/docs/${selectedDocId}/request`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

@@ -67,13 +67,13 @@ export function SigningRoom({ documentId, pdfUrl, signatureUrl, onCancel, onComp
       let uploadRes;
       
       if (publicToken) {
-        uploadRes = await fetch(`http://localhost:5000/api/docs/public/${publicToken}/sign`, {
+        uploadRes = await fetch(`https://signflow-backend-0f8n.onrender.com/api/docs/public/${publicToken}/sign`, {
           method: "PUT",
           body: formData,
         })
       } else {
         const token = localStorage.getItem("token")
-        uploadRes = await fetch(`http://localhost:5000/api/docs/${documentId}/sign`, {
+        uploadRes = await fetch(`https://signflow-backend-0f8n.onrender.com/api/docs/${documentId}/sign`, {
           method: "PUT",
           headers: { Authorization: `Bearer ${token}` },
           body: formData,
