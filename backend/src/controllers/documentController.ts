@@ -294,6 +294,7 @@ export const requestSignature = async (req: AuthRequest, res: Response): Promise
     await transporter.sendMail(mailOptions);
     res.status(200).json({ message: 'Signature request sent successfully!' });
   } catch (error) {
+    console.error("🔥 CRASH DETECTED IN REQUEST SIGNATURE:", error);
     res.status(500).json({ error: 'Failed to send signature request' });
   }
 };
