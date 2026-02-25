@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import http from 'http'; // <-- NEW IMPORT
+import http from 'http';
 import { Server } from 'socket.io';
 import './config/supabase';
 
@@ -14,20 +14,28 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // =========================================================================
+// ALLOWED ORIGINS (CORS)
+// =========================================================================
+// Tell the backend exactly who is allowed to talk to it
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://signflow-five-kappa.vercel.app" // Your live Vercel frontend
+];
+
+// =========================================================================
 // WEBSOCKET SETUP
 // =========================================================================
-// We wrap the Express app in a standard HTTP server so Socket.IO can attach to it
 const server = http.createServer(app);
 
-// Initialize Socket.IO and allow your frontend to connect
+// Initialize Socket.IO and apply the CORS rules
 export const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // Next.js frontend URL
-    methods: ["GET", "POST", "PUT", "DELETE"]
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    credentials: true
   }
 });
 
-// Listen for connections to prove it's working!
 io.on('connection', (socket) => {
   console.log(`⚡ WebSocket connected: ${socket.id}`);
   
@@ -39,7 +47,12 @@ io.on('connection', (socket) => {
 // =========================================================================
 // MIDDLEWARE & ROUTES
 // =========================================================================
-app.use(cors());
+// Apply the exact same CORS rules to standard API requests
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
 app.use(express.json());
 
 // API Routes
@@ -53,7 +66,6 @@ app.get('/', (req: Request, res: Response) => {
 // =========================================================================
 // START SERVER
 // =========================================================================
-// IMPORTANT: We must use server.listen() instead of app.listen() to start both HTTP and WebSockets!
 server.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  console.log(`🚀 Server is running on port ${PORT}`);
 });
