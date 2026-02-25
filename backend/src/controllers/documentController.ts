@@ -264,15 +264,21 @@ export const requestSignature = async (req: AuthRequest, res: Response): Promise
       { expiresIn: '7d' }
     );
 
-    const signLink = `http://localhost:3000/sign/${signToken}`;
+    // FIX 1: Use the live Vercel URL so the email link actually works!
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const signLink = `${frontendUrl}/sign/${signToken}`;
 
+    // FIX 2: Force IPv4 so Render doesn't block the network request
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      family: 4, // THIS BYPASSES THE ENETUNREACH ERROR
       auth: {
         user: process.env.EMAIL_USER as string,
         pass: process.env.EMAIL_APP_PASSWORD as string, 
       },
-    });
+    } as any); // <-- "as any" silences the TypeScript error!
 
     const mailOptions = {
       from: `"Document Signature App" <${process.env.EMAIL_USER}>`,
