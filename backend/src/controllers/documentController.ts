@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { supabase } from '../config/supabase';
 import { AuthRequest } from '../middlewares/authMiddleware';
-import nodemailer from 'nodemailer'; 
+import { Resend } from 'resend'; 
 import jwt from 'jsonwebtoken'; 
 import { io } from '../server'; 
 
@@ -264,25 +264,17 @@ export const requestSignature = async (req: AuthRequest, res: Response): Promise
       { expiresIn: '7d' }
     );
 
-    // FIX 1: Use the live Vercel URL so the email link actually works!
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
     const signLink = `${frontendUrl}/sign/${signToken}`;
 
-    // FIX 2: Force IPv4 so Render doesn't block the network request
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      family: 4, // THIS BYPASSES THE ENETUNREACH ERROR
-      auth: {
-        user: process.env.EMAIL_USER as string,
-        pass: process.env.EMAIL_APP_PASSWORD as string, 
-      },
-    } as any); // <-- "as any" silences the TypeScript error!
+    // Initialize Resend
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-    const mailOptions = {
-      from: `"Document Signature App" <${process.env.EMAIL_USER}>`,
-      to: email,
+    // ⚠️ IMPORTANT: Because you are on the free testing tier of Resend, 
+    // the "from" address MUST be 'onboarding@resend.dev'
+    const { data, error } = await resend.emails.send({
+      from: 'SignFlow App <onboarding@resend.dev>',
+      to: [email], 
       subject: `Signature Requested: ${doc.file_name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 10px;">
@@ -295,13 +287,18 @@ export const requestSignature = async (req: AuthRequest, res: Response): Promise
           </div>
         </div>
       `,
-    };
+    });
 
-    await transporter.sendMail(mailOptions);
+    if (error) {
+      console.error("🔥 RESEND API ERROR:", error);
+      res.status(500).json({ error: 'Failed to send signature request via API' });
+      return;
+    }
+
     res.status(200).json({ message: 'Signature request sent successfully!' });
   } catch (error) {
     console.error("🔥 CRASH DETECTED IN REQUEST SIGNATURE:", error);
-    res.status(500).json({ error: 'Failed to send signature request' });
+    res.status(500).json({ error: 'Failed to process signature request' });
   }
 };
 
